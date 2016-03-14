@@ -3,8 +3,9 @@ require 'yaml'
 
 module JIRACard
   class CLI < Thor
-    desc "my", "Prints the keys of the current user's in-progress issues"
-    option :number, type: :numeric, default: nil, aliases: %w{n}, desc: "Number of keys to print"
+    desc "my", "Prints the user's in-progress issues"
+    option :number, type: :numeric, default: nil, aliases: %w{n}, desc: "Number of issues to print"
+    option :uris, type: :boolean, default: false, aliases: %w{u}, desc: "Print URIs"
     def my
       issues = client.current_user_in_progress_issues
 
@@ -13,7 +14,7 @@ module JIRACard
       end
 
       issues.each do |issue|
-        puts issue.key
+        puts options[:uris] ? client.issue_uri(issue) : issue.key
       end
     end
 
