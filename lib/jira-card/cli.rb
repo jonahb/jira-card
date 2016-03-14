@@ -70,7 +70,7 @@ module JIRACard
 
       username = highline.ask("Username (john.doe): ")
       password = highline.ask("Password: ") { |q| q.echo = false }
-      site = highline.ask("URL (https://company.atlassian.net): ")
+      site = highline.ask("JIRA Site URL (https://company.atlassian.net): ")
       context_path = highline.ask("Context path (empty for sites on atlassian.net): ")
       branch_prefix = highline.ask("Branch name prefix: ")
 
