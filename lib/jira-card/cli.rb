@@ -6,14 +6,14 @@ module JIRACard
     desc "my", "Prints the keys of the current user's in-progress issues"
     option :number, type: :numeric, default: nil, aliases: %w{n}, desc: "Number of keys to print"
     def my
-      keys = client.current_user_in_progress_issue_keys
+      issues = client.current_user_in_progress_issues
 
       if options[:number]
-        keys = keys.take(options[:number])
+        issues = issues.take(options[:number])
       end
 
-      keys.each do |key|
-        puts key
+      issues.each do |issue|
+        puts issue.key
       end
     end
 

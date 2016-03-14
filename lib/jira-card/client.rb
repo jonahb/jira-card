@@ -15,9 +15,9 @@ module JIRACard
       @client = JIRA::Client.new(opts)
     end
 
-    def current_user_in_progress_issue_keys
+    def current_user_in_progress_issues
       jql = "assignee = currentUser() AND status = 'In Progress'"
-      @client.Issue.jql(jql).map(&:key)
+      @client.Issue.jql jql
     end
   end
 end
