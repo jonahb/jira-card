@@ -1,3 +1,4 @@
+require 'fileutils'
 require 'highline'
 require 'thor'
 require 'yaml'
@@ -84,13 +85,19 @@ module JIRACard
     end
 
     def save_config(config)
+      FileUtils.mkdir_p config_dir
+
       File.open(config_file, "w", 0600) do |io|
         YAML.dump config, io
       end
     end
 
-    def config_file
+    def config_dir
       File.expand_path "~/.jira-card"
+    end
+
+    def config_file
+      File.join config_dir, "config.yml"
     end
 
     def each_issue(options, &block)
