@@ -34,6 +34,20 @@ module JIRACard
       end
     end
 
+    desc "branch [options]", "Prints suggested branch names"
+    option :all, type: :boolean, default: false, aliases: %w{a}, desc: "Prints branch names based on issue title and key"
+    def branch
+      issues = client.current_user_in_progress_issues
+
+      unless options[:all]
+        issues = issues.take(1)
+      end
+
+      issues.each do |issue|
+        puts Util.branch_name(issue)
+      end
+    end
+
     default_command :key
 
     private
