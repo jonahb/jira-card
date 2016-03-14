@@ -8,13 +8,7 @@ module JIRACard
     long_desc "By default, prints the key of the first issue assigned to the current user"
     option :all, type: :boolean, default: false, aliases: %w{a}, desc: "Print keys for all issues"
     def key
-      issues = client.current_user_in_progress_issues
-
-      unless options[:all]
-        issues = issues.take(1)
-      end
-
-      issues.each do |issue|
+      each_issue(options) do |issue|
         puts issue.key
       end
     end
@@ -23,27 +17,15 @@ module JIRACard
     long_desc "By default, prints the URI of the first issue assigned to the current user"
     option :all, type: :boolean, default: false, aliases: %w{a}, desc: "Print URIs for all issues"
     def uri
-      issues = client.current_user_in_progress_issues
-
-      unless options[:all]
-        issues = issues.take(1)
-      end
-
-      issues.each do |issue|
-        puts @client.issue_uri(issue)
+      each_issue(options) do |issue|
+        puts client.issue_uri(issue)
       end
     end
 
     desc "branch [options]", "Prints suggested branch names"
     option :all, type: :boolean, default: false, aliases: %w{a}, desc: "Prints branch names based on issue title and key"
     def branch
-      issues = client.current_user_in_progress_issues
-
-      unless options[:all]
-        issues = issues.take(1)
-      end
-
-      issues.each do |issue|
+      each_issue(options) do |issue|
         puts Util.branch_name(issue)
       end
     end
@@ -99,6 +81,10 @@ module JIRACard
 
     def config_file
       File.expand_path "~/.jira-card"
+    end
+
+    def each_issue(options, &block)
+      client.current_user_in_progress_issues.each &block
     end
   end
 end
