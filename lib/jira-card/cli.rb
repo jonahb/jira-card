@@ -26,7 +26,7 @@ module JIRACard
     option :all, type: :boolean, default: false, aliases: %w{a}, desc: "Prints branch names based on issue title and key"
     def branch
       each_issue(options) do |issue|
-        puts Util.branch_name(issue)
+        puts Util.branch_name(issue, prefix: config[:branch_prefix])
       end
     end
 
@@ -72,12 +72,14 @@ module JIRACard
       password = highline.ask("Password: ") { |q| q.echo = false }
       site = highline.ask("URL (https://company.atlassian.net): ")
       context_path = highline.ask("Context path (empty for sites on atlassian.net): ")
+      branch_prefix = highline.ask("Branch name prefix: ")
 
       {
         username: username,
         password: password,
         site: site,
         context_path: context_path,
+        branch_prefix: branch_prefix
       }
     end
 
