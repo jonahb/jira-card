@@ -3,14 +3,14 @@ require 'cgi'
 
 module JIRACard
   class Client
-    def initialize(username, password, site)
+    def initialize(username, password, site, context_path)
       opts = {
         username: username,
         password: password,
         site: site,
         auth_type: :basic,
         read_timeout: 120,
-        context_path: ''
+        context_path: context_path
       }
 
       @client = JIRA::Client.new(opts)

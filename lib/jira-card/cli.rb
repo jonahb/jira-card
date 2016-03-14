@@ -35,7 +35,7 @@ module JIRACard
         save_config config
       end
 
-      Client.new config[:username], config[:password], config[:site]
+      Client.new config[:username], config[:password], config[:site], config[:context_path]
     end
 
     def saved_config
@@ -52,11 +52,13 @@ module JIRACard
       username = highline.ask("Username (john.doe): ")
       password = highline.ask("Password: ") { |q| q.echo = false }
       site = highline.ask("URL (https://company.atlassian.net): ")
+      context_path = highline.ask("Context path (empty for sites on atlassian.net): ")
 
       {
         username: username,
         password: password,
-        site: site
+        site: site,
+        context_path: context_path
       }
     end
 
