@@ -10,11 +10,7 @@ Run `jira-card`. You'll be prompted for:
 * Context Path (blank for sites hosted on atlassian.net)
 * Your initials (for branch prefixes)
 
-These will be saved in `~/.jira-card/config.yml`.
-
-## Warning
-
-Configuration data including password is stored in plain text in `~/.jira-card/config.yml`. Patch to store the password in the keychain, anyone?
+These will be saved in `~/.jira-card/config.yml`. _Warning:_ Configuration data is stored in plain text.
 
 ## Issue-type Prefixes
 
