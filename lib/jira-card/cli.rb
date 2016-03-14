@@ -52,7 +52,7 @@ module JIRACard
     end
 
     def branch_name(issue)
-      prefix = [issue_prefix(issue), config[:branch_prefix]].reject(&:blank?).join('/')
+      prefix = [issue_prefix(issue), config[:initials]].reject(&:blank?).join('/')
       desc = issue.summary.downcase.split.join('-')
       [prefix, issue.key, desc].reject(&:blank?).join("-")
     end
@@ -95,14 +95,14 @@ module JIRACard
       password = highline.ask("Password: ") { |q| q.echo = false }
       site = highline.ask("JIRA Site URL (https://company.atlassian.net): ")
       context_path = highline.ask("Context path (empty for sites on atlassian.net): ")
-      branch_prefix = highline.ask("Branch name prefix: ")
+      initials = highline.ask("Your initials (for branch prefixes): ")
 
       {
         username: username,
         password: password,
         site: site,
         context_path: context_path,
-        branch_prefix: branch_prefix
+        initials: initials
       }
     end
 

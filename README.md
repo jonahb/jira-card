@@ -8,7 +8,7 @@ Run `jira-card`. You'll be prompted for:
 * Password
 * JIRA Site URL
 * Context Path (blank for sites hosted on atlassian.net)
-* Branch prefix (e.g. your initials)
+* Your initials (for branch prefixes)
 
 These will be saved in `~/.jira-card/config.yml`.
 
