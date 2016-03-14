@@ -4,22 +4,37 @@ require 'yaml'
 
 module JIRACard
   class CLI < Thor
-    desc "my", "Prints the user's in-progress issues"
-    option :number, type: :numeric, default: nil, aliases: %w{n}, desc: "Number of issues to print"
-    option :uris, type: :boolean, default: false, aliases: %w{u}, desc: "Print URIs"
-    def my
+    desc "key [options]", "Prints issue keys"
+    long_desc "By default, prints the key of the first issue assigned to the current user"
+    option :all, type: :boolean, default: false, aliases: %w{a}, desc: "Print keys for all issues"
+    def key
       issues = client.current_user_in_progress_issues
 
-      if options[:number]
-        issues = issues.take(options[:number])
+      unless options[:all]
+        issues = issues.take(1)
       end
 
       issues.each do |issue|
-        puts options[:uris] ? client.issue_uri(issue) : issue.key
+        puts issue.key
       end
     end
 
-    default_command :my
+    desc "uri [options]", "Prints issue URIs"
+    long_desc "By default, prints the URI of the first issue assigned to the current user"
+    option :all, type: :boolean, default: false, aliases: %w{a}, desc: "Print URIs for all issues"
+    def uri
+      issues = client.current_user_in_progress_issues
+
+      unless options[:all]
+        issues = issues.take(1)
+      end
+
+      issues.each do |issue|
+        puts @client.issue_uri(issue)
+      end
+    end
+
+    default_command :key
 
     private
 
