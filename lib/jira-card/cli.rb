@@ -17,6 +17,8 @@ module JIRACard
       end
     end
 
+    default_command :my
+
     private
 
     def client
