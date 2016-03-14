@@ -1,3 +1,4 @@
+require 'highline'
 require 'thor'
 require 'yaml'
 
@@ -46,14 +47,11 @@ module JIRACard
     end
 
     def collect_config
-      $stdout.print "Username: "
-      username = $stdin.readline.chomp
+      highline = HighLine.new
 
-      $stdout.print "Password: "
-      password = $stdin.readline.chomp
-
-      $stdout.print "URL (https://company.atlassian.net): "
-      site = $stdin.readline.chomp
+      username = highline.ask("Username (john.doe): ")
+      password = highline.ask("Password: ") { |q| q.echo = false }
+      site = highline.ask("URL (https://company.atlassian.net): ")
 
       {
         username: username,

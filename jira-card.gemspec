@@ -15,6 +15,7 @@ Gem::Specification.new do |spec|
   spec.files = Dir['LICENSE.txt', 'lib/**/*', 'bin/**/*']
   spec.executables << 'jira-card'
 
+  spec.add_dependency 'highline', '~> 1.7'
   spec.add_dependency 'jira-ruby', '~> 0.1'
   spec.add_dependency 'thor', '~> 0.19'
 end
