@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
   spec.license = 'MIT'
   spec.required_ruby_version = '>= 2.0'
   spec.require_paths = ['lib']
-  spec.files = Dir['LICENSE.txt', 'lib/**/*', 'bin/**/*']
+  spec.files = Dir['LICENSE.txt', 'README.md', 'lib/**/*', 'bin/**/*']
   spec.executables << 'jira-card'
 
   spec.add_dependency 'highline', '~> 1.7'
