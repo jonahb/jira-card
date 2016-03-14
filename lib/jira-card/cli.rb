@@ -27,7 +27,7 @@ module JIRACard
     option :all, type: :boolean, default: false, aliases: %w{a}, desc: "Prints branch names based on issue title and key"
     def branch
       each_issue(options) do |issue|
-        puts Util.branch_name(issue, prefix: config[:branch_prefix])
+        puts branch_name(issue)
       end
     end
 
@@ -41,6 +41,20 @@ module JIRACard
 
     def config
       @config ||= new_config
+    end
+
+    def issue_prefixes
+      @issue_prefixes ||= saved_issue_prefixes
+    end
+
+    def issue_prefix(issue)
+      issue_prefixes && issue_prefixes[issue.issuetype.id]
+    end
+
+    def branch_name(issue)
+      prefix = [issue_prefix(issue), config[:branch_prefix]].reject(&:blank?).join('/')
+      desc = issue.summary.downcase.split.join('-')
+      [prefix, issue.key, desc].reject(&:blank?).join("-")
     end
 
     def new_client
@@ -61,6 +75,14 @@ module JIRACard
     def saved_config
       begin
         YAML.load_file config_file
+      rescue StandardError
+        nil
+      end
+    end
+
+    def saved_issue_prefixes
+      begin
+        YAML.load_file issue_prefixes_file
       rescue StandardError
         nil
       end
@@ -98,6 +120,10 @@ module JIRACard
 
     def config_file
       File.join config_dir, "config.yml"
+    end
+
+    def issue_prefixes_file
+      File.join config_dir, "issue_prefixes.yml"
     end
 
     def each_issue(options, &block)

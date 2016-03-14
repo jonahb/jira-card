@@ -16,6 +16,10 @@ These will be saved in `~/.jira-card/config.yml`.
 
 Configuration data including password is stored in plain text in `~/.jira-card/config.yml`. Patch to store the password in the keychain, anyone?
 
+## Issue-type Prefixes
+
+To prepend a string based on the issue type to suggested branch names, create `~/.jira-card/issue_prefixes.yml`. This file should contain a hash mapping issue type IDs to prefixes.
+
 ## Examples
 
 Print the key of the first issue assigned to the current user
@@ -36,7 +40,7 @@ Print a suggested branch name
 
 ```
 $ jira-card branch
-jsb-WEB-1234-fix-bluescreens
+bugfix/jsb-WEB-1234-fix-bluescreens
 ```
 
 Print the keys of all issues assigned to the current user
