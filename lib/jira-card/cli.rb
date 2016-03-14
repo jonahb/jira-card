@@ -38,7 +38,15 @@ module JIRACard
       @client ||= new_client
     end
 
+    def config
+      @config ||= new_config
+    end
+
     def new_client
+      Client.new config[:username], config[:password], config[:site], config[:context_path]
+    end
+
+    def new_config
       config = saved_config
 
       unless config
@@ -46,7 +54,7 @@ module JIRACard
         save_config config
       end
 
-      Client.new config[:username], config[:password], config[:site], config[:context_path]
+      config
     end
 
     def saved_config
@@ -69,7 +77,7 @@ module JIRACard
         username: username,
         password: password,
         site: site,
-        context_path: context_path
+        context_path: context_path,
       }
     end
 
