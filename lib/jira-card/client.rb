@@ -17,7 +17,7 @@ module JIRACard
     end
 
     def current_user_in_progress_issues
-      jql = "assignee = currentUser() AND status = 'In Progress'"
+      jql = "assignee = currentUser() AND status = 'In Progress' ORDER BY key"
       @client.Issue.jql jql
     end
 
