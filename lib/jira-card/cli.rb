@@ -6,8 +6,6 @@ require 'yaml'
 module JIRACard
   class CLI < Thor
     desc "key [options]", "Prints issue keys"
-    long_desc "By default, prints the key of the first issue assigned to the current user"
-    option :all, type: :boolean, default: false, aliases: %w{a}, desc: "Print keys for all issues"
     def key
       each_issue(options) do |issue|
         puts issue.key
@@ -15,8 +13,6 @@ module JIRACard
     end
 
     desc "uri [options]", "Prints issue URIs"
-    long_desc "By default, prints the URI of the first issue assigned to the current user"
-    option :all, type: :boolean, default: false, aliases: %w{a}, desc: "Print URIs for all issues"
     def uri
       each_issue(options) do |issue|
         puts client.issue_uri(issue)
@@ -24,7 +20,6 @@ module JIRACard
     end
 
     desc "branch [options]", "Prints suggested branch names"
-    option :all, type: :boolean, default: false, aliases: %w{a}, desc: "Prints branch names based on issue title and key"
     def branch
       each_issue(options) do |issue|
         puts branch_name(issue)
