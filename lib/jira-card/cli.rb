@@ -5,6 +5,19 @@ require 'yaml'
 
 module JIRACard
   class CLI < Thor
+    desc "ls [options]", "Prints issues"
+    def ls
+      each_issue(options) do |issue|
+        attrs = [
+          issue.key,
+          issue.issuetype.name,
+          issue.summary
+        ]
+
+        puts attrs.join("\t")
+      end
+    end
+
     desc "key [options]", "Prints issue keys"
     def key
       each_issue(options) do |issue|
