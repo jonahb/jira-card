@@ -39,7 +39,7 @@ module JIRACard
       end
     end
 
-    default_command :key
+    default_command :ls
 
     private
 
