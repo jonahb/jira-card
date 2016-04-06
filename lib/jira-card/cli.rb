@@ -32,6 +32,8 @@ module JIRACard
       end
     end
 
+    map url: :uri
+
     desc "branch [options]", "Prints suggested branch names"
     def branch
       each_issue(options) do |issue|
