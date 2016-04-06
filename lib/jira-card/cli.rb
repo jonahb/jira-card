@@ -1,5 +1,6 @@
 require 'fileutils'
 require 'highline'
+require 'launchy'
 require 'thor'
 require 'yaml'
 
@@ -38,6 +39,13 @@ module JIRACard
     def branch
       each_issue(options) do |issue|
         puts branch_name(issue)
+      end
+    end
+
+    desc "open", "Opens issues in a browser"
+    def open
+      each_issue(options) do |issue|
+        Launchy.open client.issue_uri(issue)
       end
     end
 
