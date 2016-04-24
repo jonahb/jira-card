@@ -8,7 +8,15 @@ require 'yaml'
 
 module JIRACard
   class CLI < Thor
+    class << self
+      def query_options
+        option :key, type: :string, aliases: :k, banner: "<issue key>"
+        option :my, type: :boolean, aliases: :m
+      end
+    end
+
     desc "ls", "Prints issues"
+    query_options
     def ls
       each_issue(options) do |issue|
         attrs = [
@@ -22,6 +30,7 @@ module JIRACard
     end
 
     desc "key", "Prints issue keys"
+    query_options
     def key
       each_issue(options) do |issue|
         puts issue.key
@@ -29,6 +38,7 @@ module JIRACard
     end
 
     desc "uri", "Prints issue URIs"
+    query_options
     def uri
       each_issue(options) do |issue|
         puts issue_uri(issue)
@@ -38,6 +48,7 @@ module JIRACard
     map url: :uri
 
     desc "branch", "Prints suggested branch names"
+    query_options
     def branch
       each_issue(options) do |issue|
         puts branch_name(issue)
@@ -45,6 +56,7 @@ module JIRACard
     end
 
     desc "open", "Opens issues in a browser"
+    query_options
     def open
       each_issue(options) do |issue|
         Launchy.open issue_uri(issue)
@@ -156,6 +168,16 @@ module JIRACard
     end
 
     def query(options)
+      if options[:key]
+        KeyQuery.new options[:key]
+      elsif options[:my]
+        MyQuery.new
+      else
+        default_query
+      end
+    end
+
+    def default_query
       MyQuery.new
     end
 
