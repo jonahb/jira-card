@@ -152,8 +152,11 @@ module JIRACard
     end
 
     def each_issue(options, &block)
-      jql = "assignee = currentUser() AND status = 'In Progress' ORDER BY key"
-      client.Issue.jql(jql).each &block
+      query(options).execute(client).each &block
+    end
+
+    def query(options)
+      MyQuery.new
     end
 
     def issue_uri(issue)
