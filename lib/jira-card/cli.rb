@@ -10,6 +10,7 @@ module JIRACard
   class CLI < Thor
     class << self
       def query_options
+        option :jql, type: :string, aliases: :j, banner: "<jql>"
         option :key, type: :string, aliases: :k, banner: "<issue key>"
         option :my, type: :boolean, aliases: :m
       end
@@ -168,7 +169,9 @@ module JIRACard
     end
 
     def query(options)
-      if options[:key]
+      if options[:jql]
+        JQLQuery.new options[:jql]
+      elsif options[:key]
         KeyQuery.new options[:key]
       elsif options[:my]
         MyQuery.new
