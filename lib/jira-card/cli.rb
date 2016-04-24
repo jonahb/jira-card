@@ -6,7 +6,7 @@ require 'yaml'
 
 module JIRACard
   class CLI < Thor
-    desc "ls [options]", "Prints issues"
+    desc "ls", "Prints issues"
     def ls
       each_issue(options) do |issue|
         attrs = [
@@ -19,14 +19,14 @@ module JIRACard
       end
     end
 
-    desc "key [options]", "Prints issue keys"
+    desc "key", "Prints issue keys"
     def key
       each_issue(options) do |issue|
         puts issue.key
       end
     end
 
-    desc "uri [options]", "Prints issue URIs"
+    desc "uri", "Prints issue URIs"
     def uri
       each_issue(options) do |issue|
         puts client.issue_uri(issue)
@@ -35,7 +35,7 @@ module JIRACard
 
     map url: :uri
 
-    desc "branch [options]", "Prints suggested branch names"
+    desc "branch", "Prints suggested branch names"
     def branch
       each_issue(options) do |issue|
         puts branch_name(issue)
