@@ -1,5 +1,7 @@
+require 'cgi'
 require 'fileutils'
 require 'highline'
+require 'jira'
 require 'launchy'
 require 'thor'
 require 'yaml'
@@ -29,7 +31,7 @@ module JIRACard
     desc "uri", "Prints issue URIs"
     def uri
       each_issue(options) do |issue|
-        puts client.issue_uri(issue)
+        puts issue_uri(issue)
       end
     end
 
@@ -45,7 +47,7 @@ module JIRACard
     desc "open", "Opens issues in a browser"
     def open
       each_issue(options) do |issue|
-        Launchy.open client.issue_uri(issue)
+        Launchy.open issue_uri(issue)
       end
     end
 
@@ -76,7 +78,12 @@ module JIRACard
     end
 
     def new_client
-      Client.new config[:username], config[:password], config[:site], config[:context_path]
+      JIRA::Client.new username: config[:username],
+        password: config[:password],
+        site: config[:site],
+        context_path: config[:context_path],
+        auth_type: :basic,
+        read_timeout: 120
     end
 
     def new_config
@@ -145,7 +152,19 @@ module JIRACard
     end
 
     def each_issue(options, &block)
-      client.current_user_in_progress_issues.each &block
+      jql = "assignee = currentUser() AND status = 'In Progress' ORDER BY key"
+      client.Issue.jql(jql).each &block
+    end
+
+    def issue_uri(issue)
+      parts = [
+        client.options[:site],
+        client.options[:context_path],
+        'browse',
+        CGI.escape(issue.key)
+      ]
+
+      parts.reject(&:blank?).join '/'
     end
   end
 end
