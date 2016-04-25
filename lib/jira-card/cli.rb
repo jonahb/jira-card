@@ -40,13 +40,12 @@ module JIRACard
 
     desc "uri", "Prints issue URIs"
     query_options
+    map url: :uri
     def uri
       each_issue(options) do |issue|
         puts issue_uri(issue)
       end
     end
-
-    map url: :uri
 
     desc "branch", "Prints suggested branch names"
     query_options
