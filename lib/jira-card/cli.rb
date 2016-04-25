@@ -1,6 +1,5 @@
 require 'cgi'
 require 'fileutils'
-require 'highline'
 require 'jira'
 require 'launchy'
 require 'thor'
@@ -8,6 +7,8 @@ require 'yaml'
 
 module JIRACard
   class CLI < Thor
+    include Thor::Actions
+
     class << self
       def query_options
         option :jql, type: :string, aliases: :j, banner: "<jql>"
@@ -126,13 +127,12 @@ module JIRACard
     end
 
     def collect_config
-      highline = HighLine.new
-
-      username = highline.ask("Username (john.doe): ")
-      password = highline.ask("Password: ") { |q| q.echo = false }
-      site = highline.ask("JIRA Site URL (https://company.atlassian.net): ")
-      context_path = highline.ask("Context path (empty for sites on atlassian.net): ")
-      initials = highline.ask("Your initials (for branch prefixes): ")
+      username = ask("Username (john.doe):")
+      password = ask("Password: ", echo: false)
+      print "\n"
+      site = ask("JIRA Site URL (https://company.atlassian.net): ")
+      context_path = ask("Context path (empty for sites on atlassian.net): ")
+      initials = ask("Your initials (for branch prefixes): ")
 
       {
         username: username,
