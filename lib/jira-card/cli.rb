@@ -17,10 +17,12 @@ module JIRACard
       end
     end
 
-    desc "ls", "Prints issues"
+    desc "ls [INDEX]", "Prints issues"
     query_options
-    def ls
-      each_issue(options) do |issue|
+    def ls(index = nil)
+      index = index && index.to_i
+
+      each_issue(options, index) do |issue|
         attrs = [
           issue.key,
           issue.issuetype.name,
@@ -31,35 +33,43 @@ module JIRACard
       end
     end
 
-    desc "key", "Prints issue keys"
+    desc "key [INDEX]", "Prints issue keys"
     query_options
-    def key
-      each_issue(options) do |issue|
+    def key(index = nil)
+      index = index && index.to_i
+
+      each_issue(options, index) do |issue|
         puts issue.key
       end
     end
 
-    desc "uri", "Prints issue URIs"
+    desc "uri [INDEX]", "Prints issue URIs"
     query_options
     map url: :uri
-    def uri
-      each_issue(options) do |issue|
+    def uri(index = nil)
+      index = index && index.to_i
+
+      each_issue(options, index) do |issue|
         puts issue_uri(issue)
       end
     end
 
-    desc "branch", "Prints suggested branch names"
+    desc "branch [INDEX]", "Prints suggested branch names"
     query_options
-    def branch
-      each_issue(options) do |issue|
+    def branch(index = nil)
+      index = index && index.to_i
+
+      each_issue(options, index) do |issue|
         puts branch_name(issue)
       end
     end
 
-    desc "open", "Opens issues in a browser"
+    desc "open [INDEX]", "Opens issues in a browser"
     query_options
-    def open
-      each_issue(options) do |issue|
+    def open(index = nil)
+      index = index && index.to_i
+
+      each_issue(options, index) do |issue|
         Launchy.open issue_uri(issue)
       end
     end
@@ -163,8 +173,14 @@ module JIRACard
       File.join config_dir, "issue_prefixes.yml"
     end
 
-    def each_issue(options, &block)
-      query(options).execute(client).each &block
+    def each_issue(options, index, &block)
+      issues = query(options).execute(client)
+
+      if index
+        issues = issues[index, 1] || []
+      end
+
+      issues.each &block
     end
 
     def query(options)
