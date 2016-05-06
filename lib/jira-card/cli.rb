@@ -18,16 +18,19 @@ module JIRACard
     end
 
     desc "ls [INDEX]", "Prints issues"
+    option :indices, type: :boolean, aliases: :i, default: true
     query_options
     def ls(index = nil)
       index = index && index.to_i
 
-      each_issue(options, index) do |issue|
+      each_issue(options, index).with_index do |issue, i|
         attrs = [
           issue.key,
           issue.issuetype.name,
           issue.summary
         ]
+
+        attrs.unshift(i) if options[:indices]
 
         puts attrs.join("\t")
       end
