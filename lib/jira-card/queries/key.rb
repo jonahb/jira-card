@@ -5,6 +5,10 @@ module JIRACard
       @key = key
     end
 
+    def single?
+      true
+    end
+
     private
 
     def do_execute(jira_client)

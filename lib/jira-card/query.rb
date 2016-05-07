@@ -6,6 +6,10 @@ module JIRACard
       @index = index
     end
 
+    def single?
+      !index.nil?
+    end
+
     def execute(jira_client)
       issues = do_execute(jira_client)
 
