@@ -93,6 +93,38 @@ module JIRACard
       end
     end
 
+    desc "show [INDEX]", "Prints issue details"
+    query_options
+    def show(index = nil)
+      index = index && index.to_i
+
+      attrs = [
+        ["Key", ->(issue) { issue.key }],
+        ["Summary", ->(issue) { issue.summary }],
+        ["Type", ->(issue) { issue.fields["issuetype"]["name"] }],
+        ["Status", ->(issue) { issue.fields["status"]["name"] }],
+        ["Resolution", ->(issue) { issue.fields["resolution"] }],
+        ["Project", ->(issue) { issue.fields["project"]["name"] }],
+        ["Labels", ->(issue) { issue.fields["labels"].join(", ") }],
+        ["Assignee", ->(issue) { person_value(issue.fields["assignee"]) }],
+        ["Creator", ->(issue) { person_value(issue.fields["creator"]) }],
+        ["Reporter", ->(issue) { person_value(issue.fields["reporter"]) }],
+        ["Created", ->(issue) { issue.fields["created"] }],
+        ["Updated", ->(issue) { issue.fields["updated"] }],
+        ["Resolved", ->(issue) { issue.fields["resolutiondate"] }],
+        ["URL", ->(issue) { issue.self }],
+        ["Description", ->(issue) { issue.fields["description"] }],
+      ]
+
+      each_issue(options, index).with_index do |issue, index|
+        print "\n" if index > 0
+
+        attrs.each do |label, value_proc|
+          puts "#{label}: #{value_proc.call(issue)}"
+        end
+      end
+    end
+
     desc "git-branch [INDEX]", "Creates a git branch and checks out the branch"
     query_options
     def git_branch(index = nil)
@@ -227,6 +259,10 @@ module JIRACard
       ]
 
       parts.reject(&:blank?).join '/'
+    end
+
+    def person_value(person_hash)
+      "#{person_hash["displayName"]} (#{person_hash["emailAddress"]})"
     end
   end
 end
