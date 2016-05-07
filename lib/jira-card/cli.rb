@@ -187,24 +187,18 @@ module JIRACard
     end
 
     def each_issue(options, index, &block)
-      issues = query(options).execute(client)
-
-      if index
-        issues = issues[index, 1] || []
-      end
-
-      issues.each &block
+      query(options, index).execute(client).each(&block)
     end
 
-    def query(options)
+    def query(options, index)
       if options[:jql]
-        JQLQuery.new options[:jql]
+        JQLQuery.new options[:jql], index
       elsif options[:key]
-        KeyQuery.new options[:key]
+        KeyQuery.new options[:key], index
       elsif options[:my]
-        MyQuery.new
+        MyQuery.new index
       else
-        MyQuery.new
+        MyQuery.new index
       end
     end
 
