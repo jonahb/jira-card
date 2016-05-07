@@ -187,10 +187,10 @@ module JIRACard
     end
 
     def each_issue(options, index, &block)
-      query(options, index).execute(client).each(&block)
+      build_query(options, index).execute(client).each(&block)
     end
 
-    def query(options, index)
+    def build_query(options, index)
       if options[:jql]
         JQLQuery.new options[:jql], index
       elsif options[:key]
