@@ -204,12 +204,8 @@ module JIRACard
       elsif options[:my]
         MyQuery.new
       else
-        default_query
+        MyQuery.new
       end
-    end
-
-    def default_query
-      MyQuery.new
     end
 
     def issue_uri(issue)
