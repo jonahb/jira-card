@@ -1,6 +1,7 @@
 require 'cgi'
 require 'fileutils'
 require 'jira'
+require 'json'
 require 'launchy'
 require 'thor'
 require 'yaml'
@@ -74,6 +75,21 @@ module JIRACard
 
       each_issue(options, index) do |issue|
         Launchy.open issue_uri(issue)
+      end
+    end
+
+    desc "json [INDEX]", "Prints JSON representation of issues"
+    query_options
+    option :pretty, type: :boolean, aliases: :p, default: true
+    def json(index = nil)
+      index = index && index.to_i
+
+      query = build_query(options, index)
+      issues = query.execute(client)
+      result = query.single? ? issues.first : issues
+
+      if result
+        puts options[:pretty] ? JSON.pretty_generate(result) : result.to_json
       end
     end
 
