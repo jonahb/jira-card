@@ -99,7 +99,7 @@ module JIRACard
 
     def branch_name(issue)
       prefix = [issue_prefix(issue), config[:initials]].reject(&:blank?).join('/')
-      desc = issue.summary.downcase.gsub(/[^\w\s]/, '').split.join('-')
+      desc = issue.summary.downcase.gsub(/[^\w\s]/, '').split(' ').join('-')
       [prefix, issue.key, desc].reject(&:blank?).join("-")
     end
 
