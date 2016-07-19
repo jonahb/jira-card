@@ -77,6 +77,16 @@ module JIRACard
       end
     end
 
+    desc "git-branch [INDEX]", "Creates a git branch and checks out the branch"
+    query_options
+    def git_branch(index = nil)
+      index = index && index.to_i
+
+      each_issue(options, index) do |issue|
+        system "git", "co", "-b", branch_name(issue)
+      end
+    end
+
     default_command :ls
 
     private
